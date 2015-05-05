@@ -1,35 +1,9 @@
 var assert = require('assert');
+var constants = require('./constants');
 
 var errors = {
   header: 'Not a valid .ASE file',
   unexpected: 'Unexpected state. This is a bug!'
-};
-
-var COLOR_START = 0x0001;
-var GROUP_START = 0xc001;
-var GROUP_END = 0xc002;
-
-var MODE_COLOR = 1;
-var MODE_GROUP = 2;
-
-var STATE_GET_MODE   = 1;
-var STATE_GET_LENGTH = 2;
-var STATE_GET_NAME   = 3;
-var STATE_GET_MODEL  = 4;
-var STATE_GET_COLOR  = 5;
-var STATE_GET_TYPE   = 6;
-
-var colorSizes = {
-  CMYK: 4,
-  RGB: 3,
-  LAB: 3,
-  GRAY: 1
-};
-
-var colorTypes = {
-  0: 'global',
-  1: 'spot',
-  2: 'normal'
 };
 
 function decode(buffer, outputType) {
@@ -52,8 +26,8 @@ function decode(buffer, outputType) {
   ].join('.');
 
   var blocks = buffer.readUInt32BE(8);
-  var state = STATE_GET_MODE;
-  var mode = MODE_COLOR;
+  var state = constants.STATE_GET_MODE;
+  var mode = constants.MODE_COLOR;
   var position = 12;
   var blockLength;
   var block;
@@ -62,12 +36,12 @@ function decode(buffer, outputType) {
 
   x: while (position < buffer.length) {
     switch (state) {
-      case STATE_GET_MODE:   readBlockMode();   continue x;
-      case STATE_GET_LENGTH: readBlockLength(); continue x;
-      case STATE_GET_NAME:   readBlockName();   continue x;
-      case STATE_GET_MODEL:  readBlockModel();  continue x;
-      case STATE_GET_COLOR:  readBlockColor();  continue x;
-      case STATE_GET_TYPE:   readBlockType();   continue x;
+      case constants.STATE_GET_MODE:   readBlockMode();   continue x;
+      case constants.STATE_GET_LENGTH: readBlockLength(); continue x;
+      case constants.STATE_GET_NAME:   readBlockName();   continue x;
+      case constants.STATE_GET_MODEL:  readBlockModel();  continue x;
+      case constants.STATE_GET_COLOR:  readBlockColor();  continue x;
+      case constants.STATE_GET_TYPE:   readBlockType();   continue x;
     }
     throw new Error(errors.unexpected);
   }
@@ -82,15 +56,15 @@ function decode(buffer, outputType) {
 
   function readBlockMode() {
     switch (buffer.readUInt16BE(position)) {
-      case COLOR_START:
+      case constants.COLOR_START:
         colors.push(block = color = {});
-        mode = MODE_COLOR;
+        mode = constants.MODE_COLOR;
         break;
-      case GROUP_START:
+      case constants.GROUP_START:
         groups.push(block = group = { colors: [] });
         mode = MODE_GROUP;
         break;
-      case GROUP_END:
+      case constants.GROUP_END:
         group = null;
         break;
 
@@ -103,7 +77,7 @@ function decode(buffer, outputType) {
     }
 
     position += 2;
-    state = STATE_GET_LENGTH;
+    state = constants.STATE_GET_LENGTH;
   }
 
   function readBlockLength() {
@@ -111,7 +85,7 @@ function decode(buffer, outputType) {
     //does on the first block, but then fails on the second.
     blockLength = buffer.readUInt32BE(position);
     position += 4;
-    state = STATE_GET_NAME;
+    state = constants.STATE_GET_NAME;
   }
 
   function readBlockName() {
@@ -122,7 +96,12 @@ function decode(buffer, outputType) {
     }
     position += 4;
     block.name = name;
-    state = mode === MODE_GROUP ? STATE_GET_MODE : STATE_GET_MODEL;
+    if(mode === constants.MODE_GROUP) {
+      state = constants.STATE_GET_MODE;
+    }
+    else {
+      state = constants.STATE_GET_MODEL;
+    }
   }
 
   function readBlockModel() {
@@ -132,12 +111,12 @@ function decode(buffer, outputType) {
       getChar8(position++) +
       getChar8(position++)
     ).trim();
-    state = STATE_GET_COLOR;
+    state = constants.STATE_GET_COLOR;
   }
 
   function readBlockColor() {
     var model = block.model.toUpperCase();
-    var count = colorSizes[model];
+    var count = constants.COLOR_SIZES[model];
     var channels = [];
 
     while (count--) {
@@ -146,13 +125,13 @@ function decode(buffer, outputType) {
     }
 
     block.color = channels;
-    state = STATE_GET_TYPE;
+    state = constants.STATE_GET_TYPE;
   }
 
   function readBlockType() {
-    block.type = colorTypes[buffer.readUInt16BE(position)];
+    block.type = constants.COLOR_TYPES[buffer.readUInt16BE(position)];
     position += 2;
-    state = STATE_GET_MODE;
+    state = constants.STATE_GET_MODE;
   }
 
   function getChar8(index) {
@@ -166,28 +145,6 @@ function decode(buffer, outputType) {
   function outputJSON(output){
    var jsonOut = JSON.stringify(output);
    return jsonOut;
-  }
-
-  function outputStylus(output){
-    var colors = output.colors;
-    var colorCount = 1;
-    var stylusOut = {};
-
-    output.colors.forEach(function(item){
-      var name = item.name;
-
-      if(item.name === ''){
-        name = "color" + colorCount;
-        colorCount++;
-      }
-
-      if(item.model === "RGB"){
-        stylusOut[name] = "rgb("+item.color[0]*255+","+item.color[1]*255+","+item.color[2]*255+")";
-      }
-
-    });
-    stylusOut = JSON.stringify(stylusOut);
-    return stylusOut;
   }
 }
 
