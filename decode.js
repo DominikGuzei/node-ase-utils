@@ -6,9 +6,9 @@ var errors = {
   unexpected: 'Unexpected state. This is a bug!'
 };
 
-function decode(buffer, outputType) {
+function decode(buffer) {
   if (typeof buffer === 'string') {
-      buffer = Buffer(buffer);
+    buffer = Buffer(buffer);
   }
 
   var output = {};
@@ -46,12 +46,6 @@ function decode(buffer, outputType) {
     throw new Error(errors.unexpected);
   }
 
-  switch (outputType) {
-    case "json": output = outputJSON(output); break;
-    case "stylus": output = outputStylus(output); break;
-  }
-
-  console.log(output);
   return output;
 
   function readBlockMode() {
@@ -140,11 +134,6 @@ function decode(buffer, outputType) {
 
   function getChar16(index) {
     return String.fromCharCode(buffer.readUInt16BE(index));
-  }
-
-  function outputJSON(output){
-   var jsonOut = JSON.stringify(output);
-   return jsonOut;
   }
 }
 
