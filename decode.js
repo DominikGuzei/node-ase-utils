@@ -1,7 +1,5 @@
 var assert = require('assert');
 
-module.exports = decode;
-
 var errors = {
   header: 'Not a valid .ASE file',
   unexpected: 'Unexpected state. This is a bug!'
@@ -192,3 +190,5 @@ function decode(buffer, outputType) {
     return stylusOut;
   }
 }
+
+module.exports = decode;
