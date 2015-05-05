@@ -3,18 +3,16 @@ var ase = require('./');
 var fs = require('fs');
 
 test('decode', function(test) {
-  var buffer = fs.readFileSync('./sample.ase');
-  var output = require('./sample.json');
-
+  var buffer = fs.readFileSync('./test.ase');
+  var output = require('./test.json');
   test.deepEqual(simplify(ase.decode(buffer)), simplify(output));
   test.end();
 });
 
 test('encode', function(test) {
-  var buffer = fs.readFileSync('./sample.ase');
-  var input = require('./sample.json');
-
-  test.deepEqual(simplify(ase.encode(input)), simplify(buffer));
+  var buffer = fs.readFileSync('./test.ase');
+  var input = require('./test.json');
+  test.deepEqual(ase.encode(input), buffer);
   test.end();
 });
 

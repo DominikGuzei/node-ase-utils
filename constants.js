@@ -1,4 +1,7 @@
 module.exports = {
+  FILE_SIGNATURE: "ASEF",
+  FORMAT_VERSION: 0x10000,
+
   COLOR_START: 0x0001,
   GROUP_START: 0xc001,
   GROUP_END  : 0xc002,
@@ -20,9 +23,15 @@ module.exports = {
     GRAY: 1
   },
 
-  COLOR_TYPES : {
+  READ_COLOR_TYPES: {
     0: 'global',
     1: 'spot',
     2: 'normal'
+  },
+
+  WRITE_COLOR_TYPES: {
+    global: 0,
+    spot: 1,
+    normal: 2
   }
 };

@@ -3,7 +3,9 @@
   "description": "Encode/decode color palettes in Adobe's .ase format",
   "version": "0.1.0",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "bytebuffer": "3.5.4"
+  },
   "devDependencies": {
     "tape": "^2.12.3",
     "faucet": "^0.0.1"
