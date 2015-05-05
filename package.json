@@ -1,0 +1,27 @@
+{
+  "name": "ase-utils",
+  "description": "Encode/decode color palettes in Adobe's .ase format",
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "^2.12.3",
+    "faucet": "^0.0.1"
+  },
+  "scripts": {
+    "test": "node test | faucet"
+  },
+  "author": {
+    "name": "Dominik Guzei",
+    "email": "office@codeadventure.com",
+    "url": "http://www.codeadventure.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CodeAdventure/ase-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/CodeAdventure/ase-utils/issues"
+  }
+}
