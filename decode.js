@@ -56,7 +56,7 @@ function decode(buffer) {
         break;
       case constants.GROUP_START:
         groups.push(block = group = { colors: [] });
-        mode = MODE_GROUP;
+        mode = constants.MODE_GROUP;
         break;
       case constants.GROUP_END:
         group = null;
