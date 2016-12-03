@@ -1,7 +1,7 @@
 {
   "name": "ase-utils",
   "description": "Encode/decode color palettes in Adobe's .ase format",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "index.js",
   "dependencies": {
     "bytebuffer": "3.5.4"
