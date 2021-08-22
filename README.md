@@ -55,4 +55,4 @@ test.end();
 
 ## License ##
 
-MIT. See [LICENSE.md](http://github.com/CodeAdventure/ase-utils/blob/master/LICENSE.md) for details.
+MIT. See [LICENSE.md](http://github.com/DominikGuzei/node-ase-utils/blob/master/LICENSE.md) for details.
