@@ -15,15 +15,15 @@
   },
   "author": {
     "name": "Dominik Guzei",
-    "email": "office@codeadventure.com",
-    "url": "http://www.codeadventure.com"
+    "email": "dominik.guzei@gmail.com",
+    "url": "https://www.highest.vision/"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/CodeAdventure/ase-utils"
+    "url": "git://github.com/DominikGuzei/node-ase-utils"
   },
   "bugs": {
-    "url": "https://github.com/CodeAdventure/ase-utils/issues"
+    "url": "https://github.com/DominikGuzei/node-ase-utils/issues"
   }
 }
